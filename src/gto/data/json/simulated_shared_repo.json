@@ -1,0 +1,14 @@
+{
+  "test.csv": {
+    "fingerprint": "test_fingerprint",
+    "timestamp": "2025-05-01T23:04:19.330887"
+  },
+  "test_data.csv": {
+    "fingerprint": "Data Summary:\n- Total rows: 3\n\nColumn 'id':\n  - Count: 3\n  - Sum: 6.00\n  - Mean: 2.00\n  - Std: 1.00\n\nColumn 'value':\n  - Count: 3\n  - Sum: 600.00\n  - Mean: 200.00\n  - Std: 100.00\n\nNumeric Column Sums:\n  - id: 6.0\n  - value: 600.0",
+    "timestamp": "2025-05-01T23:04:19.340739"
+  },
+  "examples/data/sample.csv": {
+    "fingerprint": "Data Summary:\n- Total rows: 3\n\nColumn 'id':\n  - Count: 3\n  - Sum: 6.00\n  - Mean: 2.00\n  - Std: 1.00\n\nColumn 'value':\n  - Count: 3\n  - Sum: 630.00\n  - Mean: 210.00\n  - Std: 100.00\n\nNumeric Column Sums:\n  - id: 6.0\n  - value: 630.0",
+    "timestamp": "2025-05-01T23:04:33.708748"
+  }
+}

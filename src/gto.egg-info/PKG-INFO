@@ -1,0 +1,86 @@
+Metadata-Version: 2.1
+Name: gto
+Version: 0.1.0
+Summary: GTO - Git-based Tracking of Data Changes
+Home-page: https://github.com/yourusername/gto
+Author: Data Governance Team
+Author-email: team@example.com
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+
+# GTO - Git-based Tracking of Data Changes
+
+GTO is a simple, powerful system for tracking data changes in your Python projects. Just import it and everything else happens automatically!
+
+## Quick Start
+
+```bash
+# Install
+pip install gto
+
+# Run demo
+python run_gto.py
+```
+
+That's it! The demo will show you GTO in action.
+
+## Project Structure
+
+```
+gto/
+├── src/gto/        # Main package code
+│   ├── core/       # Core functionality
+│   ├── data/       # Data handling
+│   └── reporting/  # Change reporting
+├── tests/          # Test suite
+├── docs/           # Documentation
+├── examples/       # Example data and scripts
+└── run_gto.py      # Quick demo script
+```
+
+## Features
+
+- **Automatic Change Detection**: GTO automatically detects when your data files change
+- **Human-Readable Reports**: Get clear, narrative reports of what changed in your data
+- **Historical Tracking**: Maintain a complete history of all data modifications
+- **Documentation**: Automatic generation of comprehensive documentation
+- **Repository Sync**: Keep multiple repositories in sync with your data
+
+## Detailed Usage
+
+```python
+import gto  # This automatically sets up monitoring
+
+# Your regular pandas code works as usual
+import pandas as pd
+df = pd.read_csv('data.csv')  # Changes are automatically tracked
+```
+
+## Documentation
+
+Documentation is automatically generated in the `docs/build/html` directory. You can view it by opening `docs/build/html/index.html` in your browser.
+
+## Development
+
+To set up for development:
+
+```bash
+git clone https://github.com/yourusername/gto.git
+cd gto
+pip install -e .
+```
+
+Run tests:
+```bash
+python -m pytest tests/
+```
+
+## License
+
+MIT License - See LICENSE file for details 
+

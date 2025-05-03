@@ -1,0 +1,216 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Narration &mdash; GTO Data Change Detection  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Data Storytelling" href="data_storyteller.html" />
+    <link rel="prev" title="Reporting Modules" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            GTO Data Change Detection
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../core/readme.html">GTO Data Change Detection System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/modules.html">Core Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracking/modules.html">Data Tracking Modules</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Reporting Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Data Narration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#data_narrator.craft_story_documentation"><code class="docutils literal notranslate"><span class="pre">craft_story_documentation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data_narrator.observe_data_journey"><code class="docutils literal notranslate"><span class="pre">observe_data_journey()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data_narrator.prepare_storytelling_tools"><code class="docutils literal notranslate"><span class="pre">prepare_storytelling_tools()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data_narrator.tell_example_story"><code class="docutils literal notranslate"><span class="pre">tell_example_story()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data_storyteller.html">Data Storytelling</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Python Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">GTO Data Change Detection</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Reporting Modules</a></li>
+      <li class="breadcrumb-item active">Data Narration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/reporting/data_narrator.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="data-narration">
+<h1>Data Narration<a class="headerlink" href="#data-narration" title="Link to this heading"></a></h1>
+<p id="module-data_narrator">Data Storytelling System</p>
+<p>This system helps data teams tell the story of their data by:
+1. Watching for new chapters in the data’s journey
+2. Crafting beautiful narratives about data changes
+3. Keeping a living history of the data’s evolution
+4. Sharing these stories with the whole team</p>
+<p>Key Features:
+- Automatic story detection when data changes
+- Engaging, human-readable narratives
+- A complete chronicle of data’s journey
+- Beautiful documentation of the adventure</p>
+<dl>
+<dt>Example Usage:</dt><dd><p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>python
+import pandas as pd</p>
+<p># Every data read tells a story
+df = pd.read_csv(‘my_data.csv’)</p>
+<p># When the data changes, a new chapter unfolds
+df = pd.read_csv(‘my_data.csv’)  # Will narrate any changes
+<a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+</dd>
+</dl>
+<p>Created by: Data Storytellers Guild
+Date: May 2025</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="data_narrator.craft_story_documentation">
+<span class="sig-prename descclassname"><span class="pre">data_narrator.</span></span><span class="sig-name descname"><span class="pre">craft_story_documentation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_narrator.html#craft_story_documentation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data_narrator.craft_story_documentation" title="Link to this definition"></a></dt>
+<dd><p>Create a beautiful book that tells our system’s story.</p>
+<p>The book includes:
+- The grand overview
+- The storyteller’s manual
+- Tales of usage
+- The storyteller’s configuration guide</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_narrator.observe_data_journey">
+<span class="sig-prename descclassname"><span class="pre">data_narrator.</span></span><span class="sig-name descname"><span class="pre">observe_data_journey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_narrator.html#observe_data_journey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data_narrator.observe_data_journey" title="Link to this definition"></a></dt>
+<dd><p>Watch the data’s journey and tell its story.</p>
+<p>This storyteller:
+1. Reads the current chapter of data
+2. Captures its essence
+3. Checks how the story has evolved
+4. Shares new developments with others
+5. Chronicles the journey</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_narrator.prepare_storytelling_tools">
+<span class="sig-prename descclassname"><span class="pre">data_narrator.</span></span><span class="sig-name descname"><span class="pre">prepare_storytelling_tools</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_narrator.html#prepare_storytelling_tools"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data_narrator.prepare_storytelling_tools" title="Link to this definition"></a></dt>
+<dd><p>Gather all the tools needed for our data storytelling.</p>
+<p>We need:
+- pandas: Our lens into the data
+- gitpython: Our messenger to other storytellers
+- sphinx: Our book publisher</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_narrator.tell_example_story">
+<span class="sig-prename descclassname"><span class="pre">data_narrator.</span></span><span class="sig-name descname"><span class="pre">tell_example_story</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_narrator.html#tell_example_story"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data_narrator.tell_example_story" title="Link to this definition"></a></dt>
+<dd><p>Demonstrate the art of data storytelling.</p>
+<p>This tale shows:
+1. The birth of a dataset
+2. Its first reading
+3. How it grows and changes
+4. How we detect and share its evolution
+5. How we document its journey</p>
+</dd></dl>
+
+<p>The data_narrator module provides functionality for generating human-readable reports about data changes:</p>
+<ul class="simple">
+<li><p>Change reporting</p></li>
+<li><p>Data summarization</p></li>
+<li><p>Narrative generation</p></li>
+</ul>
+<section id="example-usage">
+<h2>Example Usage<a class="headerlink" href="#example-usage" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">data_narrator</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataNarrator</span>
+
+<span class="c1"># Create a narrator instance</span>
+<span class="n">narrator</span> <span class="o">=</span> <span class="n">DataNarrator</span><span class="p">()</span>
+
+<span class="c1"># Generate a report about changes</span>
+<span class="n">report</span> <span class="o">=</span> <span class="n">narrator</span><span class="o">.</span><span class="n">generate_report</span><span class="p">(</span><span class="s1">&#39;data.csv&#39;</span><span class="p">)</span>
+
+<span class="c1"># Print the report</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="Reporting Modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="data_storyteller.html" class="btn btn-neutral float-right" title="Data Storytelling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Data Governance Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

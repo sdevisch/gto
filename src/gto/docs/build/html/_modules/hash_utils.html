@@ -1,0 +1,298 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hash_utils &mdash; GTO Data Change Detection  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            GTO Data Change Detection
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../core/readme.html">GTO Data Change Detection System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/modules.html">Core Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracking/modules.html">Data Tracking Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reporting/modules.html">Reporting Modules</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Python Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">GTO Data Change Detection</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hash_utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hash_utils</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Data Change Tracking Utilities</span>
+
+<span class="sd">This module helps track changes in data files by:</span>
+<span class="sd">1. Computing summaries of data content</span>
+<span class="sd">2. Generating unique fingerprints (hashes) of those summaries</span>
+<span class="sd">3. Storing the history of changes</span>
+<span class="sd">4. Reporting when data has been modified</span>
+
+<span class="sd">The goal is to make data changes transparent and traceable, helping</span>
+<span class="sd">maintain data integrity and compliance.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">git</span><span class="w"> </span><span class="kn">import</span> <span class="n">Repo</span>
+
+<span class="c1"># File paths for storing tracking information</span>
+<span class="n">HISTORY_LOG</span> <span class="o">=</span> <span class="s2">&quot;gto_reproducibility_state_log.json&quot;</span>
+<span class="n">LOCAL_REPO</span> <span class="o">=</span> <span class="s2">&quot;simulated_shared_repo.json&quot;</span>
+
+<div class="viewcode-block" id="setup_config">
+<a class="viewcode-back" href="../hash_utils.html#hash_utils.setup_config">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">setup_config</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create or load the configuration settings.</span>
+<span class="sd">    </span>
+<span class="sd">    The config file determines whether to use Git for distributed tracking</span>
+<span class="sd">    or keep everything local. Default is local-only mode.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">CONFIG_FILE</span> <span class="o">=</span> <span class="s2">&quot;config.json&quot;</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">CONFIG_FILE</span><span class="p">):</span>
+        <span class="n">default_settings</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;use_git&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># Local mode by default</span>
+            <span class="s2">&quot;git_repo_url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://github.com/your_org/shared_hash_repo.git&quot;</span>
+        <span class="p">}</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">CONFIG_FILE</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">default_settings</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">CONFIG_FILE</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_history">
+<a class="viewcode-back" href="../hash_utils.html#hash_utils.load_history">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_history</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load the history of data changes from the log file.</span>
+<span class="sd">    Returns an empty history if this is the first time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">HISTORY_LOG</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">HISTORY_LOG</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{}</span></div>
+
+
+<div class="viewcode-block" id="save_history">
+<a class="viewcode-back" href="../hash_utils.html#hash_utils.save_history">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_history</span><span class="p">(</span><span class="n">history</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Save the updated history of data changes to the log file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">HISTORY_LOG</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">history</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="summarize_dataframe">
+<a class="viewcode-back" href="../hash_utils.html#hash_utils.summarize_dataframe">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">summarize_dataframe</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a summary of a dataframe&#39;s content.</span>
+<span class="sd">    </span>
+<span class="sd">    Instead of tracking every value, we track:</span>
+<span class="sd">    - The number of rows</span>
+<span class="sd">    - The sum of each numeric column</span>
+<span class="sd">    This gives us a good fingerprint of the data while being space-efficient.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;rows&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span>
+        <span class="s2">&quot;numeric_sums&quot;</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="s1">&#39;number&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="create_fingerprint">
+<a class="viewcode-back" href="../hash_utils.html#hash_utils.create_fingerprint">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_fingerprint</span><span class="p">(</span><span class="n">summary</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a unique fingerprint (hash) of a data summary.</span>
+<span class="sd">    </span>
+<span class="sd">    We use SHA256 because:</span>
+<span class="sd">    - It&#39;s cryptographically secure</span>
+<span class="sd">    - Produces fixed-length output</span>
+<span class="sd">    - Even tiny changes result in completely different fingerprints</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">serialized</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">summary</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">serialized</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="share_fingerprint">
+<a class="viewcode-back" href="../hash_utils.html#hash_utils.share_fingerprint">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">share_fingerprint</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">fingerprint</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Share the data fingerprint with other users.</span>
+<span class="sd">    </span>
+<span class="sd">    In Git mode: Pushes to a shared repository</span>
+<span class="sd">    In local mode: Saves to a local file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_git&quot;</span><span class="p">]:</span>
+        <span class="n">_share_via_git</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">fingerprint</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_share_locally</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">fingerprint</span><span class="p">)</span></div>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_share_via_git</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">fingerprint</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Share fingerprint using a Git repository for collaboration.&quot;&quot;&quot;</span>
+    <span class="n">HASH_REPO_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/.gto_shared_hash_repo&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Clone or use existing repo</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">HASH_REPO_PATH</span><span class="p">):</span>
+        <span class="n">Repo</span><span class="o">.</span><span class="n">clone_from</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;git_repo_url&quot;</span><span class="p">],</span> <span class="n">HASH_REPO_PATH</span><span class="p">)</span>
+    <span class="n">repo</span> <span class="o">=</span> <span class="n">Repo</span><span class="p">(</span><span class="n">HASH_REPO_PATH</span><span class="p">)</span>
+    
+    <span class="c1"># Update fingerprints file</span>
+    <span class="n">fingerprints_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">HASH_REPO_PATH</span><span class="p">,</span> <span class="s2">&quot;shared_hashes.json&quot;</span><span class="p">)</span>
+    <span class="n">fingerprints</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fingerprints_file</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fingerprints_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">fingerprints</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    
+    <span class="c1"># Add new fingerprint with timestamp</span>
+    <span class="n">fingerprints</span><span class="p">[</span><span class="n">filepath</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;fingerprint&quot;</span><span class="p">:</span> <span class="n">fingerprint</span><span class="p">,</span>
+        <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+    <span class="p">}</span>
+    
+    <span class="c1"># Save and push changes</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fingerprints_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">fingerprints</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    
+    <span class="n">repo</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">add</span><span class="p">([</span><span class="s2">&quot;shared_hashes.json&quot;</span><span class="p">])</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Update fingerprint for </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">remote</span><span class="p">()</span><span class="o">.</span><span class="n">push</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_share_locally</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">fingerprint</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Share fingerprint by saving to a local file.&quot;&quot;&quot;</span>
+    <span class="c1"># Create file if it doesn&#39;t exist</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">LOCAL_REPO</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">LOCAL_REPO</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">({},</span> <span class="n">f</span><span class="p">)</span>
+    
+    <span class="c1"># Update fingerprints</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">LOCAL_REPO</span><span class="p">,</span> <span class="s2">&quot;r+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">fingerprints</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+            <span class="n">fingerprints</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="n">fingerprints</span><span class="p">[</span><span class="n">filepath</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;fingerprint&quot;</span><span class="p">:</span> <span class="n">fingerprint</span><span class="p">,</span>
+            <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+        <span class="p">}</span>
+        
+        <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">fingerprints</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">truncate</span><span class="p">()</span>
+
+<div class="viewcode-block" id="report_changes">
+<a class="viewcode-back" href="../hash_utils.html#hash_utils.report_changes">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">report_changes</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">old_version</span><span class="p">,</span> <span class="n">new_summary</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a human-readable report of what changed in the data.</span>
+<span class="sd">    </span>
+<span class="sd">    Shows:</span>
+<span class="sd">    - Which file changed</span>
+<span class="sd">    - What the specific changes were</span>
+<span class="sd">    - When the change was detected</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[Data Change Report] Changes detected in &#39;</span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">&#39;:&quot;</span><span class="p">)</span>
+    <span class="n">old_summary</span> <span class="o">=</span> <span class="n">old_version</span><span class="p">[</span><span class="s2">&quot;summary&quot;</span><span class="p">]</span>
+    
+    <span class="c1"># Compare each aspect of the summaries</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">old_summary</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">old_summary</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">!=</span> <span class="n">new_summary</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">old_summary</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">new_summary</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Timestamp: </span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> </div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Data Governance Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,217 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Main Module &mdash; GTO Data Change Detection  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Hash Utilities" href="hash_utils.html" />
+    <link rel="prev" title="Python Modules" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GTO Data Change Detection
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="core/readme.html">GTO Data Change Detection System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core/modules.html">Core Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tracking/modules.html">Data Tracking Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reporting/modules.html">Reporting Modules</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Main Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#main.demonstrate_functionality"><code class="docutils literal notranslate"><span class="pre">demonstrate_functionality()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#main.generate_documentation"><code class="docutils literal notranslate"><span class="pre">generate_documentation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#main.install_dependencies"><code class="docutils literal notranslate"><span class="pre">install_dependencies()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#main.monitor_csv_reading"><code class="docutils literal notranslate"><span class="pre">monitor_csv_reading()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hash_utils.html">Hash Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Data Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_tracker.html">Data Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_narrator.html">Data Narration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_storyteller.html">Data Storytelling</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GTO Data Change Detection</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Python Modules</a></li>
+      <li class="breadcrumb-item active">Main Module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/main.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="main-module">
+<h1>Main Module<a class="headerlink" href="#main-module" title="Link to this heading"></a></h1>
+<p id="module-main">Data Change Detection System</p>
+<p>This system helps data scientists and analysts maintain data integrity by:
+1. Automatically detecting when data files change
+2. Providing clear, human-readable change reports
+3. Maintaining a history of all data modifications
+4. Generating comprehensive documentation</p>
+<p>Key Features:
+- Transparent monitoring of data read operations
+- Detailed change detection and reporting
+- Historical state tracking
+- Automatic documentation generation</p>
+<dl>
+<dt>Example Usage:</dt><dd><p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>python
+import pandas as pd</p>
+<p># Regular pandas read_csv is automatically monitored
+df = pd.read_csv(‘my_data.csv’)</p>
+<p># If the file changes and is read again, you’ll get a report:
+df = pd.read_csv(‘my_data.csv’)  # Will show changes if any
+<a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+</dd>
+</dl>
+<p>Created by: GTO Data Governance Team
+Date: May 2025</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="main.demonstrate_functionality">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">demonstrate_functionality</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/main.html#demonstrate_functionality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#main.demonstrate_functionality" title="Link to this definition"></a></dt>
+<dd><p>Show how the system works with a simple example.</p>
+<p>This demonstration:
+1. Creates a sample dataset
+2. Reads it once to establish baseline
+3. Modifies the data
+4. Reads it again to show change detection
+5. Generates documentation</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="main.generate_documentation">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">generate_documentation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/main.html#generate_documentation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#main.generate_documentation" title="Link to this definition"></a></dt>
+<dd><p>Generate beautiful HTML documentation for this system.</p>
+<p>The documentation includes:
+- System overview
+- API reference
+- Usage examples
+- Configuration guide</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="main.install_dependencies">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">install_dependencies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/main.html#install_dependencies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#main.install_dependencies" title="Link to this definition"></a></dt>
+<dd><p>Ensure all required packages are installed.</p>
+<p>We need:
+- pandas: For data handling
+- gitpython: For distributed change tracking
+- sphinx: For documentation generation</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="main.monitor_csv_reading">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">monitor_csv_reading</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/main.html#monitor_csv_reading"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#main.monitor_csv_reading" title="Link to this definition"></a></dt>
+<dd><p>Enhanced version of pandas.read_csv that tracks data changes.</p>
+<p>This function:
+1. Reads the CSV file normally
+2. Creates a summary of its contents
+3. Checks if the data changed since last read
+4. Reports any changes found
+5. Updates the change history</p>
+</dd></dl>
+
+<p>The main module provides the core functionality of the GTO Data Change Detection system. It includes:</p>
+<ul class="simple">
+<li><p>Data change monitoring</p></li>
+<li><p>Documentation generation</p></li>
+<li><p>System demonstration</p></li>
+</ul>
+<section id="example-usage">
+<h2>Example Usage<a class="headerlink" href="#example-usage" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">main</span><span class="w"> </span><span class="kn">import</span> <span class="n">demonstrate_functionality</span>
+
+<span class="c1"># Run the demonstration</span>
+<span class="n">demonstrate_functionality</span><span class="p">()</span>
+
+<span class="c1"># Generate documentation</span>
+<span class="n">generate_documentation</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="Python Modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="hash_utils.html" class="btn btn-neutral float-right" title="Hash Utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Data Governance Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
