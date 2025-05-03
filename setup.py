@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="gto",
-    version="0.1.0",
+    version="0.0.1",
     package_dir={"": "src"},
     packages=find_packages(where="src"),
     install_requires=[
@@ -43,4 +43,8 @@ setup(
     ],
     keywords="git, data tracking, version control, reproducibility",
     scripts=['run_trust_demo.py'],
+    package_data={
+        "gto": ["examples/*.py"],
+    },
+    include_package_data=True,
 ) 
